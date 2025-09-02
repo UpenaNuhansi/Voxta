@@ -17,18 +17,23 @@
     /* alternate background after audio is generated */
     body.bg-alt {
       background: url('room2.jpg') no-repeat center center fixed;
-      background-size: 200% 200%;
+      background-size: cover;
+      background-position: center center;
     }
   </style>
 </head>
 <body class="bg-image text-gray-900 dark:text-gray-100 flex items-center justify-center min-h-screen p-4">
 
-  <div class="w-full max-w-md mx-auto bg-white/90 dark:bg-gray-800/90 backdrop-blur rounded-2xl shadow-xl p-8 text-center">
-    <h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-2">Document Audio Player</h1>
-    <p class="text-gray-600 dark:text-gray-300 mb-6">Upload a .txt or .pdf file, then generate and listen to the audio.</p>
+  <div class="absolute top-8 left-8 z-10">
+        <h2 class="text-white text-5xl font-extrabold tracking-tight drop-shadow-lg">VOXTA <span class="text-blue-400">AI</span></h2>
+    </div>
 
-    <button id="playButton" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition-transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 flex items-center justify-center disabled:bg-blue-400 disabled:cursor-not-allowed">
-      <svg id="playIcon" class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+  <div class="w-full max-w-md mx-auto bg-white/10 dark:bg-gray-900/10 backdrop-blur-xl rounded-3xl shadow-2xl p-8 text-center border border-gray-200 dark:border-gray-700">
+    <h1 class="text-4xl font-extrabold text-white dark:text-white mb-2 tracking-wide">Document Audio Player</h1>
+    <p class="text-gray-600 dark:text-gray-300 mb-6">Upload a .txt or .pdf file, then generate and listen to the audio of your doument.</p>
+
+    <button id="playButton" class="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg focus:outline-none focus:ring-4 focus:ring-blue-400 dark:focus:ring-blue-800 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed disabled:from-gray-500 disabled:to-gray-600">
+      <svg id="playIcon" class="w-7 h-7 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
           d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -38,22 +43,23 @@
     </button>
 
     <input type="file" id="fileInput" class="hidden" accept=".pdf,.txt">
-    <label for="fileInput" class="mt-4 w-full inline-block bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-white font-medium py-3 px-6 rounded-xl cursor-pointer transition-colors">
+    <label for="fileInput" class="mt-6 w-full inline-block bg-gray-700 hover:bg-gray-600 text-white font-medium py-3 px-6 rounded-xl cursor-pointer transition-colors duration-200 border border-gray-600">
+      <svg class="inline-block w-5 h-5 mr-2 -mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
       Upload Document (.txt, .pdf)
     </label>
 
-    <p id="fileStatus" class="text-sm text-gray-500 dark:text-gray-400 mt-2 h-5">No file uploaded.</p>
+    <p id="fileStatus" class="text-sm text-gray-400 dark:text-gray-400 mt-4 h-5">No file uploaded.</p>
 
-    <div id="loadingIndicator" class="hidden mt-4 flex items-center justify-center">
-      <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+    <div id="loadingIndicator" class="hidden mt-6 flex items-center justify-center text-blue-300">
+      <svg class="animate-spin -ml-1 mr-3 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.37 0 0 5.37 0 12h4zm2 5.29A8 8 0 014 12H0c0 3.04 1.13 5.82 3 7.94l3-2.65z"></path>
       </svg>
-      <span class="text-gray-600 dark:text-gray-300">Generating audio, please wait...</span>
+      <span class="text-gray-300 dark:text-gray-300 text-lg">Generating audio, please wait...</span>
     </div>
 
-    <div id="audioContainer" class="mt-6"></div>
-    <p id="errorMessage" class="text-red-500 mt-4"></p>
+    <div id="audioContainer" class="mt-8"></div>
+    <p id="errorMessage" class="text-red-400 mt-4 text-sm"></p>
   </div>
 
   <script>
