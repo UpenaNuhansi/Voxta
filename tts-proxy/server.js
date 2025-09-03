@@ -19,7 +19,7 @@ const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
 
 // Check if the API key was loaded correctly when the server starts.
 if (!GOOGLE_API_KEY) {
-  console.error('🔴 FATAL ERROR: GOOGLE_API_KEY not found.');
+  console.error('FATAL ERROR: GOOGLE_API_KEY not found.');
   console.error('Please create a .env file in the root directory with the line:');
   console.error('GOOGLE_API_KEY=YOUR_SECRET_API_KEY');
   process.exit(1); // Stop the server from starting if the key is missing
@@ -62,7 +62,7 @@ app.post('/api/generate-audio', async (req, res) => {
 
 // Start the server
 app.listen(port, () => {
-  console.log(`✅ Secure proxy server running at http://localhost:${port}`);
+  console.log(`Secure proxy server running at http://localhost:${port}`);
   console.log('API key has been loaded successfully.');
   console.log('Your frontend should now send requests here.');
 });
