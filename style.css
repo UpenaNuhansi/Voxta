@@ -1,0 +1,77 @@
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-image 0.9s ease-in-out, background-color 0.9s ease-in-out;
+            background-size: cover;
+            background-position: center center;
+            background-image: url('assests/room.jpg'); 
+            overflow-x: hidden; /* Prevents horizontal scrollbar */
+        }
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            transition: opacity 1.5s ease-in-out;
+            z-index: -1;
+        }
+        body.bg-alt {
+            background-image: url('assests/room2.jpg');
+            background-size: cover;
+            background-position: center center;
+        }
+        body.bg-alt::before {
+            background: linear-gradient(135deg, rgba(17, 24, 39, 0.8), rgba(31, 41, 55, 0.8), rgba(14, 165, 233, 0.8));
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #2d3748;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4a5568;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #606d80;
+        }
+        
+        /* Custom styles for the range input (progress bar) thumb */
+    .custom-range-thumb::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 12px; /* Size of the thumb */
+        height: 12px; /* Size of the thumb */
+        border-radius: 50%; /* Make it circular */
+        background: #1e90ff; /* Blue color for the thumb */
+        cursor: pointer;
+        margin-top: -5px; /* Adjust to vertically align the thumb on the track */
+        box-shadow: 0 0 0 3px rgba(30, 144, 255, 0.5); /* Blue glow */
+    }
+
+    .custom-range-thumb::-moz-range-thumb {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #1e90ff;
+        cursor: pointer;
+        box-shadow: 0 0 0 3px rgba(30, 144, 255, 0.5);
+    }
+
+    /* Style for the track (the bar itself) */
+    .custom-range-thumb::-webkit-slider-runnable-track {
+        width: 100%;
+        height: 4px; /* Thickness of the track */
+        background: #4a5568; /* Dark gray track */
+        border-radius: 5px;
+    }
+
+    .custom-range-thumb::-moz-range-track {
+        width: 100%;
+        height: 4px;
+        background: #4a5568;
+        border-radius: 5px;
+    }

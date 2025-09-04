@@ -5,85 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Voxta: Document Audio Player</title>
 
-    <link rel="icon" href="voxta_icon.png" type="image/png">
+    <link rel="icon" href="assests/voxta_icon.png" type="image/png">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            transition: background-image 0.8s ease-in-out, background-color 0.8s ease-in-out;
-            background-size: cover;
-            background-position: center center;
-            background-image: url('room.jpg'); 
-            overflow-x: hidden; /* Prevents horizontal scrollbar */
-        }
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: -1;
-        }
-        body.bg-alt {
-            background-image: url('room2.jpg');
-            background-size: cover;
-            background-position: center center;
-        }
-        body.bg-alt::before {
-            background: linear-gradient(135deg, rgba(17, 24, 39, 0.8), rgba(31, 41, 55, 0.8), rgba(14, 165, 233, 0.8));
-        }
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #2d3748;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #4a5568;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #606d80;
-        }
-        .character-container {
-            position: absolute;
-            z-index: 0;
-            pointer-events: none;
-            display: none;
-        }
-        @media (min-width: 768px) {
-            .character-container {
-                display: block;
-            }
-        }
-        #char-left-bottom {
-            bottom: 20px;
-            left: 20px;
-            width: 150px;
-            height: 150px;
-        }
-        #char-right-top {
-            top: 20px;
-            right: 20px;
-            width: 120px;
-            height: 120px;
-        }
-        #char-center-left {
-            top: 50%;
-            left: 50px;
-            transform: translateY(-50%);
-            width: 100px;
-            height: 100px;
-        }
-    </style>
+   
+    <link rel="stylesheet" href="style.css">
+
 </head>
-<body class="bg-image text-gray-900 dark:text-gray-100 flex flex-col items-center justify-start min-h-screen relative overflow-hidden md:justify-center">
+<body class="bg-image bg-no-repeat bg-center bg-cover bg-fixed transition-colors duration-700 relative flex flex-col items-center min-h-screen">
 
     <header class="w-full flex justify-between items-center px-4 py-6 md:px-8 md:py-8 z-20">
         <div class="z-10">
@@ -91,7 +23,7 @@
         </div>
 
         <nav class="hidden md:flex space-x-6">
-            <a href="#" id="documentLink" class="text-white hover:text-blue-400 transition-colors duration-200 font-medium">Document Audio</a>
+            <a href="#" id="documentLink" class="text-white hover:text-blue-400 transition-colors duration-200 font-medium">Generate Now</a>
             <a href="#" id="aboutLink" class="text-white hover:text-blue-400 transition-colors duration-200 font-medium">About</a>
             <a href="#" id="contactLink" class="text-white hover:text-blue-400 transition-colors duration-200 font-medium">Contact</a>
         </nav>
@@ -112,7 +44,7 @@
             </button>
         </div>
         <nav class="flex flex-col items-center justify-center space-y-8 h-full">
-            <a href="#" class="text-white text-3xl font-bold hover:text-blue-400 transition-colors duration-200" id="mobileDocumentLink">Document Audio</a>
+            <a href="#" class="text-white text-3xl font-bold hover:text-blue-400 transition-colors duration-200" id="mobileDocumentLink">Generate Now</a>
             <a href="#" class="text-white text-3xl font-bold hover:text-blue-400 transition-colors duration-200" id="mobileAboutLink">About</a>
             <a href="#" class="text-white text-3xl font-bold hover:text-blue-400 transition-colors duration-200" id="mobileContactLink">Contact</a>
         </nav>
@@ -121,9 +53,8 @@
     <div id="aboutPopup" class="hidden fixed right-4 md:right-8 z-30 w-72 md:w-80 bg-gray-800/80 backdrop-blur-md rounded-2xl shadow-xl p-6 transition-all duration-300 transform scale-95 opacity-0 top-20">
         <h3 class="text-xl font-bold text-white mb-2">About Voxta AI</h3>
         <p class="text-gray-300 text-sm">
-            Voxta AI is a simple, powerful tool that converts your text documents into high-quality audio.
-            Powered by Google's generative models, it's designed to make document consumption easier and more accessible.
-            Developed with passion from Nugegoda, Sri Lanka.
+            Voxta AI is a simple and powerful tool that converts your text documents into high-quality audio.
+            Powered by Google's generative models. It's designed to make document consumption easier and more accessible.
         </p>
     </div>
 
@@ -148,283 +79,37 @@
         </ul>
     </div>
 
-    <div class="w-full max-w-sm md:max-w-md lg:max-w-lg mx-auto bg-white/10 dark:bg-gray-900/10 backdrop-blur-xl rounded-3xl shadow-2xl p-8 text-center border border-gray-700/50 z-10 my-10 md:my-16 lg:my-20">
-        <h1 class="text-2xl md:text-3xl lg:text-4xl font-extrabold text-white mb-2 tracking-wide">Document Audio Player</h1>
-        <p class="text-gray-300 mb-6 md:mb-8 text-sm md:text-lg">Upload a .txt or .pdf file, then generate and listen to the audio of your document.</p>
-        <button id="playButton" class="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold py-3 md:py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg focus:outline-none focus:ring-4 focus:ring-blue-400 dark:focus:ring-blue-800 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed disabled:from-gray-500 disabled:to-gray-600">
-            <svg id="playIcon" class="w-6 md:w-7 h-6 md:h-7 mr-2 md:mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-            <span id="buttonText" class="text-base md:text-lg">Generate & Play Audio</span>
-        </button>
-        <input type="file" id="fileInput" class="hidden" accept=".pdf,.txt">
-        <label for="fileInput" class="mt-4 md:mt-6 w-full inline-block bg-gray-700 hover:bg-gray-600 text-white font-medium py-3 px-6 rounded-xl cursor-pointer transition-colors duration-200 border border-gray-600">
-            <svg class="inline-block w-5 h-5 mr-2 -mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
-            Upload Document (.txt, .pdf)
-        </label>
-        <p id="fileStatus" class="text-sm text-gray-400 mt-2 md:mt-4 h-5">No file uploaded.</p>
-        <div id="loadingIndicator" class="hidden mt-4 md:mt-6 flex items-center justify-center text-blue-300">
-            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 md:h-6 md:w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.37 0 0 5.37 0 12h4zm2 5.29A8 8 0 014 12H0c0 3.04 1.13 5.82 3 7.94l3-2.65z"></path>
-            </svg>
-            <span class="text-sm md:text-lg text-gray-300">Generating audio, please wait...</span>
-        </div>
-        <div id="audioContainer" class="mt-6 md:mt-8"></div>
-        <p id="errorMessage" class="text-red-400 mt-4 text-xs md:text-sm"></p>
+    <div class="w-full max-w-sm md:max-w-md lg:max-w-lg bg-white/10 dark:bg-gray-900/10 backdrop-blur-xl rounded-3xl shadow-2xl p-8 text-center border border-gray-700/50 z-10 mt-28 md:mt-3 mb-10 px-7 md:px-9">
+    <h1 class="text-2xl md:text-3xl lg:text-4xl font-extrabold text-white mb-2 tracking-wide">Document Audio Player</h1>
+    <p class="text-gray-300 mb-6 md:mb-8 text-sm md:text-lg">Upload a .txt or .pdf file, then generate and listen to the audio of your document.</p>
+    <button id="playButton" class="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold py-3 md:py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg focus:outline-none focus:ring-4 focus:ring-blue-400 dark:focus:ring-blue-800 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed disabled:from-gray-500 disabled:to-gray-600">
+        <svg id="playIcon" class="w-6 md:w-7 h-6 md:h-7 mr-2 md:mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        <span id="buttonText" class="text-base md:text-lg">Generate & Play Audio</span>
+    </button>
+    <input type="file" id="fileInput" class="hidden" accept=".pdf,.txt">
+    <label for="fileInput" class="mt-4 md:mt-6 w-full inline-block bg-gray-700 hover:bg-gray-600 text-white font-medium py-3 px-6 rounded-xl cursor-pointer transition-colors duration-200 border border-gray-600">
+        <svg class="inline-block w-5 h-5 mr-2 -mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+        Upload Document (.txt, .pdf)
+    </label>
+    <p id="fileStatus" class="text-sm text-gray-400 mt-2 md:mt-4 h-5">No file uploaded.</p>
+    <div id="loadingIndicator" class="hidden mt-4 md:mt-6 flex items-center justify-center text-blue-300">
+        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 md:h-6 md:w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.37 0 0 5.37 0 12h4zm2 5.29A8 8 0 014 12H0c0 3.04 1.13 5.82 3 7.94l3-2.65z"></path>
+        </svg>
+        <span class="text-sm md:text-lg text-gray-300">Generating audio, please wait...</span>
     </div>
+    
+    <div id="audioContainer" class="mt-6 md:mt-8 flex flex-col items-center">
+        </div>
 
-    <div id="char-left-bottom" class="character-container"></div>
-    <div id="char-right-top" class="character-container"></div>
-    <div id="char-center-left" class="character-container"></div>
+    <p id="errorMessage" class="text-red-400 mt-4 text-xs md:text-sm"></p>
+</div>
 
-    <script>
-        const playButton = document.getElementById('playButton')
-        const buttonText = document.getElementById('buttonText')
-        const playIcon = document.getElementById('playIcon')
-        const loadingIndicator = document.getElementById('loadingIndicator')
-        const audioContainer = document.getElementById('audioContainer')
-        const errorMessage = document.getElementById('errorMessage')
-        const fileInput = document.getElementById('fileInput')
-        const fileStatus = document.getElementById('fileStatus')
-
-        // Desktop nav links and pop-ups
-        const aboutLink = document.getElementById('aboutLink')
-        const contactLink = document.getElementById('contactLink')
-        const aboutPopup = document.getElementById('aboutPopup')
-        const contactPopup = document.getElementById('contactPopup')
-
-        // Mobile menu elements
-        const hamburgerBtn = document.getElementById('hamburgerBtn')
-        const closeMenuBtn = document.getElementById('closeMenuBtn')
-        const mobileMenu = document.getElementById('mobileMenu')
-        const mobileAboutLink = document.getElementById('mobileAboutLink')
-        const mobileContactLink = document.getElementById('mobileContactLink')
-
-        let documentText = `Welcome to Voxta. Please upload a document to begin.`
-
-        if (window.pdfjsLib) {
-            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js'
-        }
-
-        let hideTimeout;
-
-        // Function to show a pop-up
-        function showPopup(element) {
-            clearTimeout(hideTimeout);
-            element.classList.remove('hidden', 'scale-95', 'opacity-0');
-            element.classList.add('scale-100', 'opacity-100');
-        }
-
-        // Function to hide a pop-up with a delay
-        function startHidePopup(element) {
-            hideTimeout = setTimeout(() => {
-                element.classList.remove('scale-100', 'opacity-100');
-                element.classList.add('scale-95', 'opacity-0');
-                setTimeout(() => {
-                    element.classList.add('hidden');
-                }, 300); // Wait for the transition to finish
-            }, 100); // 100ms delay before starting the hide transition
-        }
-
-        // --- Desktop Pop-up Logic ---
-        if (aboutLink && aboutPopup) {
-            aboutLink.addEventListener('mouseover', () => showPopup(aboutPopup));
-            aboutLink.addEventListener('mouseleave', () => startHidePopup(aboutPopup));
-            aboutPopup.addEventListener('mouseover', () => clearTimeout(hideTimeout));
-            aboutPopup.addEventListener('mouseleave', () => startHidePopup(aboutPopup));
-        }
-
-        if (contactLink && contactPopup) {
-            contactLink.addEventListener('mouseover', () => showPopup(contactPopup));
-            contactLink.addEventListener('mouseleave', () => startHidePopup(contactPopup));
-            contactPopup.addEventListener('mouseover', () => clearTimeout(hideTimeout));
-            contactPopup.addEventListener('mouseleave', () => startHidePopup(contactPopup));
-        }
-
-        // --- Mobile Menu Logic ---
-        hamburgerBtn.addEventListener('click', () => {
-            mobileMenu.classList.remove('-translate-x-full');
-            mobileMenu.classList.add('translate-x-0');
-        });
-
-        closeMenuBtn.addEventListener('click', () => {
-            mobileMenu.classList.remove('translate-x-0');
-            mobileMenu.classList.add('-translate-x-full');
-        });
-
-        // Add click events for mobile menu links to show pop-ups
-        if (mobileAboutLink && aboutPopup) {
-            mobileAboutLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                showPopup(aboutPopup);
-                mobileMenu.classList.remove('translate-x-0');
-                mobileMenu.classList.add('-translate-x-full');
-            });
-        }
-        if (mobileContactLink && contactPopup) {
-            mobileContactLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                showPopup(contactPopup);
-                mobileMenu.classList.remove('translate-x-0');
-                mobileMenu.classList.add('-translate-x-full');
-            });
-        }
-        // --- End Mobile Menu Logic ---
-
-        fileInput.addEventListener('change', handleFileUpload)
-
-        async function handleFileUpload(event) {
-            const file = event.target.files[0]
-            if (!file) return
-            fileStatus.textContent = `Processing "${file.name}"...`
-            errorMessage.textContent = ''
-            audioContainer.innerHTML = ''
-            playButton.disabled = false;
-            try {
-                if (file.type === 'application/pdf') {
-                    documentText = await readPdfFile(file)
-                } else if (file.type === 'text/plain') {
-                    documentText = await readTxtFile(file)
-                } else {
-                    throw new Error('Unsupported file type. Please upload a .txt or .pdf file.')
-                }
-                fileStatus.textContent = `Ready: "${file.name}".`
-            } catch (error) {
-                errorMessage.textContent = `Error reading file: ${error.message}`
-                fileStatus.textContent = 'File processing failed.'
-                console.error(error)
-                playButton.disabled = true;
-            }
-        }
-        function readTxtFile(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader()
-                reader.onload = e => resolve(e.target.result)
-                reader.onerror = () => reject(new Error('Failed to read the text file.'))
-                reader.readAsText(file)
-            })
-        }
-        async function readPdfFile(file) {
-            const reader = new FileReader()
-            return new Promise((resolve, reject) => {
-                reader.onload = async e => {
-                    const data = new Uint8Array(e.target.result)
-                    try {
-                        const pdf = await pdfjsLib.getDocument({ data }).promise
-                        let fullText = ''
-                        for (let i = 1; i <= pdf.numPages; i++) {
-                            const page = await pdf.getPage(i)
-                            const textContent = await page.getTextContent()
-                            fullText += textContent.items.map(item => item.str).join(' ') + '\n'
-                        }
-                        resolve(fullText)
-                    } catch (err) {
-                        reject(new Error('Failed to parse the PDF file.'))
-                    }
-                }
-                reader.onerror = () => reject(new Error('Failed to read the PDF file.'))
-                reader.readAsArrayBuffer(file)
-            })
-        }
-        function base64ToArrayBuffer(base64) {
-            const binaryString = window.atob(base64)
-            const len = binaryString.length
-            const bytes = new Uint8Array(len)
-            for (let i = 0; i < len; i++) bytes[i] = binaryString.charCodeAt(i)
-            return bytes.buffer
-        }
-        function pcmToWav(pcmData, sampleRate) {
-            const numChannels = 1
-            const bitsPerSample = 16
-            const byteRate = sampleRate * numChannels * bitsPerSample / 8
-            const blockAlign = numChannels * bitsPerSample / 8
-            const dataSize = pcmData.length * 2
-            const buffer = new ArrayBuffer(44 + dataSize)
-            const view = new DataView(buffer)
-            writeString(view, 0, 'RIFF')
-            view.setUint32(4, 36 + dataSize, true)
-            writeString(view, 8, 'WAVE')
-            writeString(view, 12, 'fmt ')
-            view.setUint32(16, 16, true)
-            view.setUint16(20, 1, true)
-            view.setUint16(22, numChannels, true)
-            view.setUint32(24, sampleRate, true)
-            view.setUint32(28, byteRate, true)
-            view.setUint16(32, blockAlign, true)
-            view.setUint16(34, bitsPerSample, true)
-            writeString(view, 36, 'data')
-            view.setUint32(40, dataSize, true)
-            const pcm16 = new Int16Array(pcmData.buffer, pcmData.byteOffset, pcmData.length)
-            for (let i = 0; i < pcm16.length; i++) {
-                view.setInt16(44 + i * 2, pcm16[i], true)
-            }
-            return new Blob([view], { type: 'audio/wav' })
-        }
-        function writeString(view, offset, string) {
-            for (let i = 0; i < string.length; i++) view.setUint8(offset + i, string.charCodeAt(i))
-        }
-        const apiUrl = 'http://localhost:3000/api/generate-audio'
-        playButton.addEventListener('click', async () => {
-            playButton.disabled = true
-            loadingIndicator.classList.remove('hidden')
-            audioContainer.innerHTML = ''
-            errorMessage.textContent = ''
-            const payload = {
-                model: 'gemini-2.5-flash-preview-tts',
-                contents: [{ parts: [{ text: `Read the following text clearly and at a moderate pace: ${documentText}` }] }],
-                generationConfig: {
-                    responseModalities: ['AUDIO'],
-                    speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: 'Kore' } } }
-                }
-            }
-            try {
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                })
-                if (!response.ok) {
-                    const errorText = await response.text()
-                    throw new Error(errorText || `HTTP ${response.status}`)
-                }
-                const result = await response.json()
-                const part = result?.candidates?.[0]?.content?.parts?.[0]
-                const audioData = part?.inlineData?.data
-                const mimeType = part?.inlineData?.mimeType
-                if (audioData && mimeType && mimeType.startsWith('audio/')) {
-                    document.body.classList.add('bg-alt')
-                    const sampleRateMatch = mimeType.match(/rate=(\d+)/)
-                    const sampleRate = sampleRateMatch ? parseInt(sampleRateMatch[1], 10) : 24000
-                    const pcmDataBuffer = base64ToArrayBuffer(audioData)
-                    const pcm16 = new Int16Array(pcmDataBuffer)
-                    const wavBlob = pcmToWav(pcm16, sampleRate)
-                    const audioUrl = URL.createObjectURL(wavBlob)
-                    const audio = new Audio(audioUrl)
-                    audio.controls = true
-                    audio.autoplay = true
-                    audio.onended = () => {
-                        buttonText.textContent = 'Play Again'
-                        document.body.classList.remove('bg-alt')
-                        playIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>`
-                    }
-                    audio.onplaying = () => {
-                        buttonText.textContent = 'Playing...'
-                        playIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>`
-                    }
-                    audioContainer.appendChild(audio)
-                } else {
-                    throw new Error('Invalid audio data received from API.')
-                }
-            } catch (err) {
-                console.error('Error generating audio:', err)
-                errorMessage.textContent = `Failed to generate audio. ${err.message}`
-            } finally {
-                loadingIndicator.classList.add('hidden')
-                playButton.disabled = false
-            }
-        })
-    </script>
+    <script src="script.js"></script>
+    
 </body>
 </html>
