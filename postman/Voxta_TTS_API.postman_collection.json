@@ -1,0 +1,41 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "name": "Voxta TTS API",
+    "description": "Collection for testing the Voxta Text-to-Speech proxy API, which forwards requests to Google's Gemini TTS model.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Generate TTS Audio",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"contents\": [\n    {\n      \"parts\": [\n        {\n          \"text\": \"{{text_prompt}}\"\n        }\n      ]\n    }\n  ],\n  \"generationConfig\": {\n    \"responseModalities\": [\"AUDIO\"],\n    \"speechConfig\": {\n      \"voiceConfig\": {\n        \"prebuiltVoiceConfig\": {\n          \"voiceName\": \"{{voice_name}}\"\n        }\n      }\n    }\n  },\n  \"model\": \"gemini-2.5-flash-preview-tts\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/generate-audio",
+          "host": ["{{base_url}}"],
+          "path": ["api", "generate-audio"]
+        },
+        "description": "Sends text to the Voxta proxy server to generate audio using Google's Gemini TTS API."
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    }
+  ]
+}
