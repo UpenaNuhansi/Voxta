@@ -1,0 +1,69 @@
+name: Voxta CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-api:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Matches your project (Node.js LTS)
+
+      # Install project dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Install Newman for Postman collection testing
+      - name: Install Newman
+        run: npm install -g newman
+
+      # Create .env file with Google API key from GitHub Secrets
+      - name: Create .env file
+        run: |
+          echo "GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }}" > tts-proxy/.env
+        env:
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+
+      # Create Postman environment file from template
+      - name: Create Postman environment file
+        run: |
+          cp postman/Voxta_TTS_API.postman_environment.template.json postman/Voxta_TTS_API.postman_environment.json
+          # Replace placeholder api_key (optional, as server uses .env)
+          sed -i 's/your_actual_google_api_key/${{ secrets.GOOGLE_API_KEY }}/' postman/Voxta_TTS_API.postman_environment.json
+
+      # Start the Voxta server in the background
+      - name: Start Voxta server
+        run: |
+          node server.js &
+          sleep 5 # Wait for server to start
+        working-directory: .
+
+      # Run Postman collection with Newman
+      - name: Run Postman collection
+        run: |
+          newman run postman/Voxta_TTS_API.postman_collection.json \
+            -e postman/Voxta_TTS_API.postman_environment.json \
+            --reporters cli,junit \
+            --reporter-junit-export newman-report.xml
+        env:
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+
+      # Upload Newman test report as artifact
+      - name: Upload Newman report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: newman-report
+          path: newman-report.xml

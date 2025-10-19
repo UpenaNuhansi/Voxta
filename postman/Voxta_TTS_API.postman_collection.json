@@ -8,6 +8,21 @@
   "item": [
     {
       "name": "Generate TTS Audio",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Response is 200 OK with audio data\", function () {",
+              "    pm.response.to.have.status(200);",
+              "    pm.expect(pm.response.json().candidates[0].content.parts[0].inlineData.data).to.be.a('string');",
+              "    pm.expect(pm.response.json().candidates[0].content.parts[0].inlineData.mimeType).to.equal('audio/pcm');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
       "request": {
         "method": "POST",
         "header": [
